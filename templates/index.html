@@ -1,14 +1,37 @@
 <!DOCTYPE html>
 <html lang="en">
+
 <head>
-    <meta charset="UTF-8">
-    <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>Automated Answer Script Evaluation and Grading</title>
-    <link rel="stylesheet" href="{{ url_for('static', filename='styles.css') }}">
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>Automated Answer Script Evaluation and Grading</title>
+  <link rel="stylesheet" href="{{ url_for('static', filename='styles.css') }}">
 </head>
+
 <body>
-    <div class="button-container">
-        <button class="btn">Button 1</button>
-        <button class="btn">Button 2</button>
+  <div class="button-container">
+    <input id="subcode" type="text" placeholder="Insert Subject code" />
+    <button id="create-qp">create qp</button>
+    <button class="btn">Button 2</button>
+
+    <script>
+      const subCode = document.getElementById("subcode");
+      subCode.addEventListener("input", checkInputs);
+
+      const createButton = document.getElementById("create-qp");
+      function checkInputs() {
+        if (subCode.value) {
+          createButton.removeAttribute("disabled");
+        } else {
+          createButton.setAttribute("disabled", "");
+        }
+      }
+      createButton.addEventListener("click", function () {
+        window.location.href = "qp.html";
+        var code = document.getElementById("subcode").value;
+        localStorage.setItem("sc", code);
+      });
+    </script>
 </body>
+
 </html>
