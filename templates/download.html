@@ -1,0 +1,20 @@
+<!DOCTYPE html>
+<html>
+
+<head>
+    <title>Download Question Paper</title>
+    <link rel="stylesheet" type="text/css" href="/static/download.css" />
+</head>
+
+<body>
+    <h1>Your download is ready!</h1>
+    <button id='download'>Download</button>
+    <script>
+        const downloadButton = document.getElementById('download');
+        downloadButton.addEventListener('click', function () {
+            window.location.href = 'http://127.0.0.1:5000/generate'
+        });
+    </script>
+</body>
+
+</html>

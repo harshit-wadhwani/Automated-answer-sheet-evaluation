@@ -1,0 +1,108 @@
+<!DOCTYPE html>
+<html>
+
+<head>
+  <link rel="stylesheet" type="text/css" href="/static/Genstyle.css" />
+</head>
+
+<body>
+  <div id="menu">
+    <h1>Generate questions </h1>
+    <button id="home">Home</button>
+    <p>Enter the question and answers in the given fields. Please ensure that all fields are filled correctly.</p>
+    <input id="score" type="text" placeholder="Insert Score" />
+    <input id="question" type="text" placeholder="Enter Question" />
+    <input id="answer" type="text" placeholder="Enter Answer" />
+
+    <button id="save-next">Save and next </button>
+    <button id="generate">Generate and Quit</button>
+  </div>
+
+  <script>
+
+    document.getElementById("home").addEventListener("click", function () {
+      window.location.href = "/";
+    });
+
+    const scoreInput = document.getElementById("score");
+    const questionInput = document.getElementById("question");
+    const answerInput = document.getElementById("answer");
+    const saveNextButton = document.getElementById("save-next");
+    const generateButton = document.getElementById("generate");
+
+    scoreInput.addEventListener("input", checkInputs);
+    questionInput.addEventListener("input", checkInputs);
+    answerInput.addEventListener("input", checkInputs);
+    const data = [];
+    let pageNumber = 1;
+
+    function checkInputs() {
+      if (scoreInput.value && questionInput.value && answerInput.value) {
+        saveNextButton.removeAttribute("disabled");
+        generateButton.removeAttribute("disabled");
+      } else {
+        saveNextButton.setAttribute("disabled", "");
+        generateButton.setAttribute("disabled", "");
+      }
+    }
+
+
+    var sc = localStorage.getItem("sc");
+    function saveData() {
+      data.push({
+        code: sc,
+        score: scoreInput.value,
+        question: questionInput.value,
+        answer: answerInput.value,
+        Qid: sc + pageNumber,
+      });
+      pageNumber++;
+      fetch('/data', {
+        method: 'POST',
+        headers: {
+          'Content-Type': 'application/json'
+        },
+        body: JSON.stringify({ data })
+      })
+        .then(response => {
+          if (response.ok) {
+            console.log('Data saved successfully');
+            // Optionally, you can clear the input fields here
+            scoreInput.value = "";
+            questionInput.value = "";
+            answerInput.value = "";
+            checkInputs(); // Update button states
+          } else {
+            console.error('Failed to save data');
+          }
+        })
+        .catch(error => {
+          console.error('Error:', error);
+        });
+    }
+    saveNextButton.addEventListener("click", saveData);
+
+
+
+    generateButton.addEventListener('click', async () => {
+      saveData
+      try {
+        const response = await fetch('http://127.0.0.1:5000/generate', {
+          method: 'POST',
+        });
+
+        if (!response.ok) {
+          throw new Error('Network response was not ok');
+        }
+        const mes = await response.json();
+        console.log(mes.message);
+        window.location.href = 'download.html';
+      } catch (error) {
+        console.error('Error:', error);
+      }
+    });
+
+  </script>
+</body>
+
+</html>
