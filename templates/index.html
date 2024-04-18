@@ -10,9 +10,9 @@
 
 <body>
   <div class="button-container">
-    <input id="subcode" type="text" placeholder="Insert Subject code" />
+    <input id="subcode" type="text" placeholder="Insert Subject code" required/>
     <button id="create-qp">create qp</button>
-    <button class="btn">Button 2</button>
+    <button class="btn" onclick="redirectToEvaluation()">Button 2</button>
 
     <script>
       const subCode = document.getElementById("subcode");
@@ -31,6 +31,10 @@
         var code = document.getElementById("subcode").value;
         localStorage.setItem("sc", code);
       });
+
+      function redirectToEvaluation() {
+        window.location.href = "{{ url_for('evaluation') }}";
+    }
     </script>
 </body>
 
