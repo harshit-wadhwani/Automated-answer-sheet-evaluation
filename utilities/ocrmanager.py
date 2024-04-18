@@ -2,6 +2,7 @@ import os
 os.environ["GOOGLE_APPLICATION_CREDENTIALS"] = "D:\PERSONAL_PROJS\Cloudvision\\apikey.json"
 import io
 from google.cloud import vision
+import re
 
 
 def detect_document_text(pdf_file_path):
@@ -24,23 +25,23 @@ def detect_document_text(pdf_file_path):
         requests=[{"input_config": {"content": content, "mime_type": mime_type}, "features": [feature]}]
     )
 
-    # Store the text in a dictionary with page numbers as keys
-    extracted_text = {}
+    student_info = []
+    student_ans = []
+
+    #change regex as per format
+    pattern = r'\d{2}Q\d{2}'
+
     for image_response in response.responses:
         for page in image_response.responses:
-            if c not in extracted_text:
-                extracted_text[c] = ""
-            extracted_text[c] += page.full_text_annotation.text + "\n"
+            if c == 1:
+                student_info.append(page.full_text_annotation.text)
+            else:
+                answers = re.split(pattern, page.full_text_annotation.text)
+                # Filter out empty strings
+                answers = [answer.strip() for answer in answers if answer.strip()]
+                student_ans.extend(answers)
+
             c=c+1
 
-    # Combine the text in the desired order
-    result = ""
-    for page_num, text in extracted_text.items():
-        if(page_num==1 or page_num==2):
-            result += f"PAGE {page_num} :\n{text}\n"
-        else:
-            result += f"{text}\n"
-
-    return result
-
+    return student_info, student_ans
 
