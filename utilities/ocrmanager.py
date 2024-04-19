@@ -1,5 +1,5 @@
 import os
-os.environ["GOOGLE_APPLICATION_CREDENTIALS"] = "D:\PERSONAL_PROJS\Cloudvision\\apikey.json"
+os.environ["GOOGLE_APPLICATION_CREDENTIALS"] = "apikey.json"
 import io
 from google.cloud import vision
 import re
