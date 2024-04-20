@@ -79,19 +79,27 @@ def upload_file():
 def result(filename):
     file_path = os.path.join(app.config['UPLOAD_FOLDER'], filename)
     
-    l_info,l_ans = detect_document_text(file_path)
+    l_info,l_ans,l_pat= detect_document_text(file_path)
+    
     data = {}
 
-    for i in range(len(l_info)):
-        student_data = {
-            "name": l_info[0], 
-            "subcode": l_info[1],  
-            f"ans{i+1}": l_ans[i]  
+    for i in range(len(l_pat)):
+        student_data = { 
+            f"ans{i+1}": l_ans[i] 
         }
-        usn = l_info[2] 
-        if usn not in data:
-            data[usn] = []
-        data[usn].append(student_data)
+
+        uni_key = l_info[2]+"-"+l_info[3]
+
+        if uni_key not in data:
+            data[uni_key] = {}
+
+        if l_info[1] not in data[uni_key]:
+            data[uni_key][l_info[1]] = []
+
+        data[uni_key][l_info[1]].append({
+            "quenum": l_pat[i],
+            "ans": student_data[f"ans{i+1}"]
+        })
 
     db_manager = dbmanager()
     collection_name='answers'
