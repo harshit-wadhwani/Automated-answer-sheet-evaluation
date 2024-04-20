@@ -6,7 +6,7 @@ load_dotenv()
 
 class dbmanager:
     def __init__(self, myuri=f"mongodb+srv://{os.environ['mongodb_userid']}:{os.environ['mongodb_password']}@examination.nxuahuw.mongodb.net/?retryWrites=true&w=majority&appName=examination" ):
-        self.client = MongoClient(myuri, ssl=True)
+        self.client = MongoClient(myuri)
         self.db = self.client['evaluation']
         
     def create(self, collection_name, data):
@@ -32,3 +32,9 @@ class dbmanager:
         result = collection.delete_many(query)
         return result.deleted_count
     
+
+db = dbmanager()
+d = {'1DT20AIO21': [{'name': 'Sejal Kaur', 'subcode': '18AI81', 'ans1': 'S1201\nThey\nthe structural unit of\nare\ncell body containing\nnudeus,\nbranching extensions (dendrides),\nlong extensions (axon).\nNear extremity it spreads\ninto branches called telodents.\nAt the\nend of these branches\nare\nsynapses.'}, {'name': 'Sejal Kaur', 'subcode': '18AI81', 'ans2': 'p This is the simplest ANN\narchitect. Discovered by\nFrank Rosenblatt\nIt is based on TLU and LTU'}, {'name': 'Sejal Kaur', 'subcode': '18AI81', 'ans3': 'Connected to single layer of TLU\nand each TLU connected to all\ninputs.\nWhen all neurons are connected\nto all in previous then it is\ncalled\nfully\nconnected\nlayer.'}]}
+
+db.create("answers", d)
+

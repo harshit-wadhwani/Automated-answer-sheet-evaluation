@@ -79,9 +79,24 @@ def upload_file():
 def result(filename):
     file_path = os.path.join(app.config['UPLOAD_FOLDER'], filename)
     
-    l = detect_document_text(file_path)
-    
-    return render_template('result.html', filename=filename, l=l)
+    l_info,l_ans = detect_document_text(file_path)
+    data = {}
+
+    for i in range(len(l_info)):
+        student_data = {
+            "name": l_info[0], 
+            "subcode": l_info[1],  
+            f"ans{i+1}": l_ans[i]  
+        }
+        usn = l_info[2] 
+        if usn not in data:
+            data[usn] = []
+        data[usn].append(student_data)
+
+    db_manager = dbmanager()
+    collection_name='answers'
+    db_manager.create(collection_name,data)
+    return render_template('result.html', filename=filename, l_info=l_info, l_ans=l_ans)
 
 
 if __name__ == '__main__':
