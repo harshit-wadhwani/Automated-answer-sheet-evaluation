@@ -6,7 +6,7 @@ load_dotenv()
 
 class dbmanager:
     def __init__(self, myuri=f"mongodb+srv://{os.environ['mongodb_userid']}:{os.environ['mongodb_password']}@examination.nxuahuw.mongodb.net/?retryWrites=true&w=majority&appName=examination" ):
-        self.client = MongoClient(myuri, ssl=True)
+        self.client = MongoClient(myuri)
         self.db = self.client['evaluation']
         
     def create(self, collection_name, data):
@@ -32,3 +32,5 @@ class dbmanager:
         result = collection.delete_many(query)
         return result.deleted_count
     
+
+

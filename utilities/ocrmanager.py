@@ -27,21 +27,31 @@ def detect_document_text(pdf_file_path):
 
     student_info = []
     student_ans = []
+    patterns_found=[]
 
     #change regex as per format
     pattern = r'\d{2}Q\d{2}'
 
     for image_response in response.responses:
         for page in image_response.responses:
+            text=page.full_text_annotation.text
             if c == 1:
-                student_info.append(page.full_text_annotation.text)
+                info=text.split('\n')
+                name=info[1].strip()
+                subcode=info[3].strip()
+                usn=info[5].strip()
+                date=info[7].strip()
+                student_info.extend([name,subcode,usn,date])
+                # student_info=[]
+                
             else:
-                answers = re.split(pattern, page.full_text_annotation.text)
+                patterns = re.findall(pattern, text)
+                patterns_found.extend(patterns)
+                answers = re.split(pattern, text)
                 # Filter out empty strings
                 answers = [answer.strip() for answer in answers if answer.strip()]
                 student_ans.extend(answers)
 
             c=c+1
 
-    return student_info, student_ans
-
+    return student_info, student_ans, patterns_found
