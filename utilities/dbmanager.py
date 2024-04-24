@@ -31,6 +31,3 @@ class dbmanager:
         collection = self.db[collection_name]
         result = collection.delete_many(query)
         return result.deleted_count
-    
-
-

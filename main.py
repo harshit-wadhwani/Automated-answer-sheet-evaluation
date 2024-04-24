@@ -5,6 +5,7 @@ from utilities.ocrmanager import detect_document_text
 import json
 from werkzeug.utils import secure_filename
 import os
+import hashlib
 
 app = Flask(__name__)
 
@@ -58,53 +59,60 @@ def evaluation():
 
 @app.route('/upload', methods=['POST'])
 def upload_file():
-    if 'file' not in request.files:
-        return 'No file uploaded', 400
+    file_names = []
+    for f in request.files.getlist('file'):
+        if f.filename != '':
+            filename = secure_filename(f.filename)
+            file_path = os.path.join(app.config['UPLOAD_FOLDER'], filename)
+            f.save(file_path)
+            file_names.append(file_path.replace("uploads/", ""))
+            
+    result_id = "||".join(file_names)
+    return redirect(url_for("result", result_id=result_id))
 
-    file = request.files['file']
-
-    # Check if the file was actually uploaded
-    if file.filename == '':
-        return 'No file selected', 400
-
-    # Save the file to the upload folder
-    filename = secure_filename(file.filename)
-    file_path = os.path.join(app.config['UPLOAD_FOLDER'], filename)
-    file.save(file_path)
+@app.route("/result/<result_id>")
+def result(result_id):
     
+    file_nms =  result_id.split("||")
     
-    return redirect(url_for("result", filename=filename))
-
-@app.route("/result/<filename>")
-def result(filename):
-    file_path = os.path.join(app.config['UPLOAD_FOLDER'], filename)
+    l_info_list = []
+    l_ans_list = []
     
-    l_info,l_ans,l_pat= detect_document_text(file_path)
+    for filename in file_nms:
+        file_path = os.path.join(app.config['UPLOAD_FOLDER'], filename)
+        print(file_path)
+        
+        
+        l_info,l_ans,l_pat= detect_document_text(file_path)
+        
+        data = {}
+        
+        for i in range(len(l_pat)):
+            student_data = { 
+                f"ans{i+1}": l_ans[i] 
+            }
+
+            uni_key = l_info[2]+"-"+l_info[3]
+
+            if uni_key not in data:
+                data[uni_key] = {}
+
+            if l_info[1] not in data[uni_key]:
+                data[uni_key][l_info[1]] = []
+
+            data[uni_key][l_info[1]].append({
+                "quenum": l_pat[i],
+                "ans": student_data[f"ans{i+1}"]
+            })
+
+        db_manager = dbmanager()
+        collection_name='answers'
+        db_manager.create(collection_name,data)
+        l_info_list.append(l_info)
+        l_ans_list.append(l_ans)
+
     
-    data = {}
-
-    for i in range(len(l_pat)):
-        student_data = { 
-            f"ans{i+1}": l_ans[i] 
-        }
-
-        uni_key = l_info[2]+"-"+l_info[3]
-
-        if uni_key not in data:
-            data[uni_key] = {}
-
-        if l_info[1] not in data[uni_key]:
-            data[uni_key][l_info[1]] = []
-
-        data[uni_key][l_info[1]].append({
-            "quenum": l_pat[i],
-            "ans": student_data[f"ans{i+1}"]
-        })
-
-    db_manager = dbmanager()
-    collection_name='answers'
-    db_manager.create(collection_name,data)
-    return render_template('result.html', filename=filename, l_info=l_info, l_ans=l_ans)
+    return render_template('result.html', l_info=l_info_list, l_ans=l_ans_list)
 
 
 if __name__ == '__main__':
