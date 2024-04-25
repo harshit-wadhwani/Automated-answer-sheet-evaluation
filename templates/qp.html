@@ -54,8 +54,10 @@
             answerInput.value = "";checkInputs()})
    
     var sc = localStorage.getItem("sc");
+    var ud = localStorage.getItem("ud");
     function saveData() {
       data.push({
+        date: ud,
         code: sc,
         score: scoreInput.value,
         question: questionInput.value,
