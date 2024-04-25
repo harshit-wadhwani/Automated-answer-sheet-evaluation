@@ -36,6 +36,10 @@ body {
   #menu button:hover {
     background-color: #0056b3;
   }
+  #menu button:disabled {
+    background-color: #ccc;
+    cursor: not-allowed;
+  }
   
   #menu input[type="text"] {
     margin-top: 10px;

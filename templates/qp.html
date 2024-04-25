@@ -10,12 +10,13 @@
     <h1>Generate questions </h1>
     <button id="home">Home</button>
     <p>Enter the question and answers in the given fields. Please ensure that all fields are filled correctly.</p>
+    <button id="clear"disabled>clear</button>
     <input id="score" type="text" placeholder="Insert Score" />
     <input id="question" type="text" placeholder="Enter Question" />
     <input id="answer" type="text" placeholder="Enter Answer" />
-
-    <button id="save-next">Save and next </button>
-    <button id="generate">Generate and Quit</button>
+    <button id="save-next"disabled>Save and next </button>
+    <button id="generate"disabled>Generate and Quit</button>
+    
   </div>
 
   <script>
@@ -29,6 +30,7 @@
     const answerInput = document.getElementById("answer");
     const saveNextButton = document.getElementById("save-next");
     const generateButton = document.getElementById("generate");
+    const clearButton = document.getElementById("clear");
 
     scoreInput.addEventListener("input", checkInputs);
     questionInput.addEventListener("input", checkInputs);
@@ -40,13 +42,17 @@
       if (scoreInput.value && questionInput.value && answerInput.value) {
         saveNextButton.removeAttribute("disabled");
         generateButton.removeAttribute("disabled");
+        clearButton.removeAttribute("disabled");
       } else {
         saveNextButton.setAttribute("disabled", "");
         generateButton.setAttribute("disabled", "");
+        clearButton.setAttribute("disabled", "");;
       }
     }
-
-
+   clearButton.addEventListener("click", function(){ scoreInput.value = "";
+            questionInput.value = "";
+            answerInput.value = "";checkInputs()})
+   
     var sc = localStorage.getItem("sc");
     function saveData() {
       data.push({
@@ -85,7 +91,7 @@
 
 
     generateButton.addEventListener('click', async () => {
-      saveData
+      saveData()
       try {
         const response = await fetch('http://127.0.0.1:5000/generate', {
           method: 'POST',
