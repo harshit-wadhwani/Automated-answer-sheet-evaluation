@@ -22,7 +22,7 @@ def qp():
 @app.route('/data', methods=['POST'])
 def save_data():
     data = request.get_json()
-    with open('data\\current.json', 'w') as f:
+    with open('data/current.json', 'w') as f:
         json.dump(data, f)
     return jsonify({'message': 'Data saved successfully'})
 
@@ -32,8 +32,20 @@ def generate():
     qp_generater= GenerateQpaper()
     collection_name='questions'
     with open('data/current.json', 'r') as file:
-     json_data = json.load(file)
-    db_manager.create(collection_name,json_data)
+        json_data = json.load(file)
+    json_data = json_data['data']
+    new_json_data = {}
+    for item in json_data:
+        date= item('date')
+        code = item['code']
+        field = code+date
+        if field not in new_json_data:
+            new_json_data[field] = []
+        del item['code']
+        del item['date']
+        new_json_data[code].append(item)
+
+    db_manager.create(collection_name,new_json_data)
     qp_generater.MakePaper()
 
     message = "Python function executed successfully!"
