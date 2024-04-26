@@ -6,7 +6,12 @@ import json
 from werkzeug.utils import secure_filename
 import os
 import hashlib
+
+
 app = Flask(__name__)
+
+
+
 
 app.config['UPLOAD_FOLDER'] = 'uploads/'
 
