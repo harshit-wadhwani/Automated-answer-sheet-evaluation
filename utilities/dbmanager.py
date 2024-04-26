@@ -31,3 +31,19 @@ class dbmanager:
         collection = self.db[collection_name]
         result = collection.delete_many(query)
         return result.deleted_count
+    
+    def get_answers_by_code(self, collection_name, code):
+        collection = self.db[collection_name]
+        query = {"data.code": code}
+        projection = {"data": {"$elemMatch": {"code": code}}}
+        result = self.read(collection_name, query)
+        answers = []
+        for doc in result:
+            for data_item in doc.get("data", []):
+                if data_item["code"] == code:
+                    answers.append(data_item["answer"])
+        return answers
+    
+db_client = dbmanager()
+# print(db_client.read("questions", {"data.code" : "testing again"}))
+print(db_client.get_answers_by_code("questions", "18AI81"))

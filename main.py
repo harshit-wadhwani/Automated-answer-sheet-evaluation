@@ -2,6 +2,7 @@ from flask import Flask, render_template, redirect, send_file, url_for,request,j
 from utilities.dbmanager import dbmanager
 from utilities.qpapergenerator import GenerateQpaper
 from utilities.ocrmanager import detect_document_text
+from utilities.tempmanager import checkscore
 import json
 from werkzeug.utils import secure_filename
 import os
@@ -106,20 +107,25 @@ def result(result_id):
     
     l_info_list = []
     l_ans_list = []
+    db_client = dbmanager()
     
     for filename in file_nms:
         file_path = os.path.join(app.config['UPLOAD_FOLDER'], filename)
-        print(file_path)
-        
+        # print(file_path)
         
         l_info,l_ans,l_pat= detect_document_text(file_path)
+        ref_ans = []
         
+        for ques_id in l_pat:
+            ref_ans.append(db_client.read("questions", {"code": ques_id})) ##CHANGE NEEDED 
+            
+        scores= []
+        for ans, ref_answer in zip(l_ans, ref_ans):
+            scores.append(checkscore(ans, ref_answer))
+            
         data = {}
         
         for i in range(len(l_pat)):
-            student_data = { 
-                f"ans{i+1}": l_ans[i] 
-            }
 
             uni_key = l_info[2]+"-"+l_info[3]
 
@@ -131,7 +137,8 @@ def result(result_id):
 
             data[uni_key][l_info[1]].append({
                 "quenum": l_pat[i],
-                "ans": student_data[f"ans{i+1}"]
+                "ans":  l_ans[i] ,
+                "score" : scores[i]
             })
 
         db_manager = dbmanager()
