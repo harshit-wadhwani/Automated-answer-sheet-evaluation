@@ -46,6 +46,24 @@
       });
 
       function redirectToEvaluation() {
+        var code = document.getElementById("subcode").value;
+        var dateup = document.getElementById("dateup").value;
+        fetch('/for_evaluation',{
+          method: 'POST',
+          headers:{
+            'Content-Type': 'application/json'
+          },
+          body: JSON.stringify({ code }, { dateup })
+        }).then(response => {
+          if (response.ok) {
+            console.log('Data sent');
+          } else {
+            console.error('Failed to save data');
+          }
+        })
+        .catch(error => {
+          console.error('Error:', error);
+        });
         window.location.href = "{{ url_for('evaluation') }}";
       }
     </script>

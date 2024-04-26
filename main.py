@@ -1,4 +1,4 @@
-from flask import Flask, render_template, redirect, send_file, url_for,request,jsonify
+from flask import Flask, render_template, redirect, send_file, url_for,request,jsonify, session
 from utilities.dbmanager import dbmanager
 from utilities.qpapergenerator import GenerateQpaper
 from utilities.ocrmanager import detect_document_text
@@ -6,10 +6,11 @@ import json
 from werkzeug.utils import secure_filename
 import os
 import hashlib
-
 app = Flask(__name__)
 
 app.config['UPLOAD_FOLDER'] = 'uploads/'
+
+app.secret_key = 'your_secret_key'
 
 @app.route("/", methods=['GET', 'POST'])
 def hello_world():
@@ -17,10 +18,12 @@ def hello_world():
 
 @app.route('/qp.html')  # Define route for qp.html
 def qp():
+    
     return render_template('qp.html')
 
 @app.route('/data', methods=['POST'])
 def save_data():
+    
     data = request.get_json()
     with open('data/current.json', 'w') as f:
         json.dump(data, f)
@@ -36,14 +39,15 @@ def generate():
     json_data = json_data['data']
     new_json_data = {}
     for item in json_data:
-        date= item('date')
+        date= item['date']
         code = item['code']
         field = code+date
         if field not in new_json_data:
             new_json_data[field] = []
+            
         del item['code']
         del item['date']
-        new_json_data[code].append(item)
+        new_json_data[field].append(item)
 
     db_manager.create(collection_name,new_json_data)
     qp_generater.MakePaper()
@@ -64,12 +68,20 @@ def get_generate_result():
 def download_this_pdf():
     return send_file('data/questionpaper.pdf', as_attachment=True)
 
+@app.route("/for_evaluation", methods = ["POST", "GET"])
+def for_evaluation():
+    f = request.json 
+    session["code"] = f.get("code") 
+    session["date"] = f.get("dateup")
+    pass
+    
 @app.route("/evaluation", methods=['GET', 'POST'])
 def evaluation():
-    return render_template("evaluation.html")
+    
+    return render_template("evaluation.html", f=session["code"])
 
 
-@app.route('/upload', methods=['POST'])
+@app.route('/upload', methods=['POST', 'GET'])
 def upload_file():
     file_names = []
     for f in request.files.getlist('file'):
