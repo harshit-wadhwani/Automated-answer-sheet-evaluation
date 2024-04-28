@@ -3,18 +3,21 @@ from utilities.dbmanager import dbmanager
 from utilities.qpapergenerator import GenerateQpaper
 from utilities.ocrmanager import detect_document_text
 from utilities.tempmanager import checkscore
+from utilities.scoremanager import check_similarity
 import json
 from werkzeug.utils import secure_filename
 import os
 import hashlib
+from huggingface_hub import from_pretrained_keras
 
 
 app = Flask(__name__)
 
-
-
-
 app.config['UPLOAD_FOLDER'] = 'uploads/'
+model = from_pretrained_keras("keras-io/bert-semantic-similarity")
+
+# Compile the model
+
 
 app.secret_key = 'your_secret_key'
 
@@ -76,15 +79,15 @@ def download_this_pdf():
 
 @app.route("/for_evaluation", methods = ["POST", "GET"])
 def for_evaluation():
-    f = request.json 
-    session["code"] = f.get("code") 
-    session["date"] = f.get("dateup")
-    pass
+    f = request.get_json()  
+    session["code"] = f["ls"][0]['code']
+    session["dateup"] = f["ls"][0]['datestring']
+    return ""
     
 @app.route("/evaluation", methods=['GET', 'POST'])
 def evaluation():
     
-    return render_template("evaluation.html", f=session["code"])
+    return render_template("evaluation.html", f= session["code"], g= session["dateup"])
 
 
 @app.route('/upload', methods=['POST', 'GET'])
@@ -107,6 +110,7 @@ def result(result_id):
     
     l_info_list = []
     l_ans_list = []
+    scores= []
     db_client = dbmanager()
     
     for filename in file_nms:
@@ -114,14 +118,15 @@ def result(result_id):
         # print(file_path)
         
         l_info,l_ans,l_pat= detect_document_text(file_path)
-        ref_ans = []
         
-        for ques_id in l_pat:
-            ref_ans.append(db_client.read("questions", {"code": ques_id})) ##CHANGE NEEDED 
+        query = str(session["code"] + session["dateup"])
+        print(query)
+        
+        ques, ref_ans = db_client.get_quenum_ans_dict("questions", query)
             
-        scores= []
+        
         for ans, ref_answer in zip(l_ans, ref_ans):
-            scores.append(checkscore(ans, ref_answer))
+            scores.append(check_similarity(ans, ref_answer, model))
             
         data = {}
         
@@ -148,7 +153,7 @@ def result(result_id):
         l_ans_list.append(l_ans)
 
     
-    return render_template('result.html', l_info=l_info_list, l_ans=l_ans_list)
+    return render_template('result.html', l_info=l_info_list, l_ans=l_ans_list, score =scores)
 
 
 if __name__ == '__main__':

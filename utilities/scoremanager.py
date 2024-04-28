@@ -69,9 +69,9 @@ def check_similarity(sentence1, sentence2, model):
     )
     probs = model.predict(test_data[0])[0]
 
-    labels_probs = {labels[i]: float(probs[i]) for i, _ in enumerate(labels)}
+    labels_probs = {labels[i]: round(float(probs[i]),2) for i, _ in enumerate(labels)}
     return labels_probs
 
-model = from_pretrained_keras("keras-io/bert-semantic-similarity")
+# model = from_pretrained_keras("keras-io/bert-semantic-similarity")
 
-print(check_similarity("hello world", "hello world", model))
+# print(check_similarity("hello world", "hello world", model))

@@ -48,12 +48,19 @@
       function redirectToEvaluation() {
         var code = document.getElementById("subcode").value;
         var dateup = document.getElementById("dateup").value;
+        datestring = dateup.toString();
+        console.log('enteres the function');
+        const ls = [];
+        ls.push({
+          code : code,
+          datestring : datestring
+        });
         fetch('/for_evaluation',{
           method: 'POST',
           headers:{
             'Content-Type': 'application/json'
           },
-          body: JSON.stringify({ code }, { dateup })
+          body: JSON.stringify({ ls } )
         }).then(response => {
           if (response.ok) {
             console.log('Data sent');
