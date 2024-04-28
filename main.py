@@ -9,6 +9,7 @@ from werkzeug.utils import secure_filename
 import os
 import hashlib
 from huggingface_hub import from_pretrained_keras
+import pandas as pd
 
 
 app = Flask(__name__)
@@ -103,6 +104,16 @@ def upload_file():
     result_id = "||".join(file_names)
     return redirect(url_for("result", result_id=result_id))
 
+@app.route('/download_result')
+def download_file():
+    # Path to the file you want to download
+    file_path = f"outputs\\{session['code']}{session['dateup']}.xlsx"
+    # Specify the filename for the downloaded file
+    filename = f"RESULTS-{session['code']}{session['dateup']}.xlsx"
+    # Send the file to the client for download
+    return send_file(file_path, as_attachment=True )
+
+
 @app.route("/result/<result_id>")
 def result(result_id):
     
@@ -110,6 +121,7 @@ def result(result_id):
     
     l_info_list = []
     l_ans_list = []
+    l_pat_list = []
     scores= []
     db_client = dbmanager()
     
@@ -118,7 +130,7 @@ def result(result_id):
         # print(file_path)
         
         l_info,l_ans,l_pat= detect_document_text(file_path)
-        
+        scr_temp = []
         query = str(session["code"] + session["dateup"])
         print(query)
         
@@ -126,7 +138,11 @@ def result(result_id):
             
         
         for ans, ref_answer in zip(l_ans, ref_ans):
-            scores.append(check_similarity(ans, ref_answer, model))
+            que_scr = check_similarity(ans, ref_answer, model)
+            scr_temp.append(round(abs(que_scr['Perfect'] - que_scr['Contradiction']),2))
+        
+        scores.append(scr_temp)
+        
             
         data = {}
         
@@ -143,7 +159,7 @@ def result(result_id):
             data[uni_key][l_info[1]].append({
                 "quenum": l_pat[i],
                 "ans":  l_ans[i] ,
-                "score" : scores[i]
+                "score" : scr_temp[i]
             })
 
         db_manager = dbmanager()
@@ -151,6 +167,24 @@ def result(result_id):
         db_manager.create(collection_name,data)
         l_info_list.append(l_info)
         l_ans_list.append(l_ans)
+        l_pat_list.append(l_pat)
+        
+    usn_list = [i[2] for i in l_info_list]
+    name_list = [i[0] for i in l_info_list]
+    
+    no_ques = len(l_pat_list[0])
+    
+    d = {}
+    
+    d["USN"] = usn_list
+    d["Name"] = name_list
+    
+    for i in range(no_ques):
+        d[f"q{i}"] = [a[i] for a in l_ans_list]
+    
+    df = pd.DataFrame(d)
+    print(d)
+    df.to_excel(f"outputs/{query}.xlsx")
 
     
     return render_template('result.html', l_info=l_info_list, l_ans=l_ans_list, score =scores)
