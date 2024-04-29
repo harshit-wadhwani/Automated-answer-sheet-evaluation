@@ -4,6 +4,16 @@ import io
 from google.cloud import vision
 import re
 
+def remove_space(l):
+    send_list=[]
+    for element in l:
+        temp = ""
+        for i in element:
+            if i !=" ":
+                temp += i
+        send_list.append(temp)
+    return send_list
+
 
 def detect_document_text(pdf_file_path):
     """OCR with PDF file from local storage"""
@@ -30,7 +40,7 @@ def detect_document_text(pdf_file_path):
     patterns_found=[]
 
     #change regex as per format
-    pattern = r'\d{2}Q\d{2}'
+    pattern = r'\d{2}\s*[A-Z]{2}\s*\d{2}\s*Q\s*\d+'
 
     for image_response in response.responses:
         for page in image_response.responses:
@@ -54,4 +64,5 @@ def detect_document_text(pdf_file_path):
 
             c=c+1
 
-    return student_info, student_ans, patterns_found
+    patterns_found_new=remove_space(patterns_found)
+    return student_info, student_ans, patterns_found_new

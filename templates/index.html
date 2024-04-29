@@ -10,32 +10,71 @@
 
 <body>
   <div class="button-container">
-    <input id="subcode" type="text" placeholder="Insert Subject code" required/>
-    <button id="create-qp">create qp</button>
-    <button class="btn" onclick="redirectToEvaluation()">Button 2</button>
+    <p><h1>Hi Evaluator!</h1> <h2>Welcome to Automated Answer Evaluation protal.</h2> Please enter the subject code to get started</p>
+    <input id="subcode" type="text" placeholder="Insert Subject code"></input>
+    <input id="dateup" type="text" placeholder="Enter the exam date"></input>
+    <button id="create"disabled>Create QP</button>
+    <button id="evaluate"onclick="redirectToEvaluation()"disabled>Evaluate</button>
 
     <script>
-      const subCode = document.getElementById("subcode");
-      subCode.addEventListener("input", checkInputs);
-
-      const createButton = document.getElementById("create-qp");
-      function checkInputs() {
-        if (subCode.value) {
-          createButton.removeAttribute("disabled");
-        } else {
-          createButton.setAttribute("disabled", "");
-        }
+      const createButton = document.getElementById("create");
+      const evaluateButton = document.getElementById("evaluate");
+      document.getElementById("subcode").addEventListener("input", function() {
+      if (document.getElementById('subcode').value) {
+        evaluateButton.removeAttribute("disabled");}
+      else {
+        createButton.setAttribute("disabled", "disabled");
+        evaluateButton.setAttribute("disabled", "disabled");
       }
+    });
+
+    document.getElementById("dateup").addEventListener("input", function() {
+      if (document.getElementById('dateup').value) {
+        createButton.removeAttribute("disabled");}
+      else {
+        createButton.setAttribute("disabled", "disabled");
+      }
+    });
+
+      
       createButton.addEventListener("click", function () {
         window.location.href = "qp.html";
         var code = document.getElementById("subcode").value;
+        var dateup = document.getElementById("dateup").value;
         localStorage.setItem("sc", code);
+        localStorage.setItem("ud",dateup)
       });
 
       function redirectToEvaluation() {
+        var code = document.getElementById("subcode").value;
+        var dateup = document.getElementById("dateup").value;
+        datestring = dateup.toString();
+        console.log('enteres the function');
+        const ls = [];
+        ls.push({
+          code : code,
+          datestring : datestring
+        });
+        fetch('/for_evaluation',{
+          method: 'POST',
+          headers:{
+            'Content-Type': 'application/json'
+          },
+          body: JSON.stringify({ ls } )
+        }).then(response => {
+          if (response.ok) {
+            console.log('Data sent');
+          } else {
+            console.error('Failed to save data');
+          }
+        })
+        .catch(error => {
+          console.error('Error:', error);
+        });
         window.location.href = "{{ url_for('evaluation') }}";
-    }
+      }
     </script>
+  </div>
 </body>
 
 </html>
