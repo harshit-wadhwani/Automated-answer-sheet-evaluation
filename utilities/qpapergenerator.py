@@ -13,15 +13,23 @@ class GenerateQpaper:
         # Extract page numbers and questions
         qid = [item['Qid'] for item in data['data']]
         questions = [item['question'] for item in data['data']]
-
+        score = [int(item['score']) for item in data['data']]
+        total= sum(score)
+        for item in data['data']:
+            date= item['date']
+            code = item['code']
+            break
         result_string = ""
-        for num, question in zip(qid, questions):
-            result_string += f"{num}. {question}\n"
+        for num, question,score in zip(qid, questions,score):
+            result_string += f"{num}.\t{question}\t Total Marks:{score}\n"
 
         doc= DocxTemplate('templates/qpapertemp.docx')
             
         context= { 
-        'questions': result_string
+        'questions': result_string,
+        'total': total,
+        'code': code,
+        'date': date
         }
         doc.render(context)
         doc.save('data/questionpaper.docx')
