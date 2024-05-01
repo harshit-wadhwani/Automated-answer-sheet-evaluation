@@ -1,0 +1,21 @@
+<!DOCTYPE html>
+<html lang="en">
+  <head>
+    <meta charset="UTF-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+    <title>Welcom on board</title>
+  </head>
+  <body>
+    <form action="{{ url_for('createquestions') }}" method="post">
+      <button type="submit">Create Question Paper</button>
+    </form>
+
+    <form action="{{ url_for('evaluation') }}" method="post">
+      <button type="submit">Evaluate Answer Sheet</button>
+    </form>
+
+    <form action="{{ url_for('results') }}" method="post">
+      <button type="submit">Previos Evaluated Results</button>
+    </form>
+  </body>
+</html>
