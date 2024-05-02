@@ -10,6 +10,7 @@ import os
 import hashlib
 from huggingface_hub import from_pretrained_keras
 import pandas as pd
+from datetime import datetime
 
 
 app = Flask(__name__)
@@ -22,8 +23,16 @@ model = from_pretrained_keras("keras-io/bert-semantic-similarity")
 
 app.secret_key = 'your_secret_key'
 
-@app.route("/", methods=['GET', 'POST'])
-def hello_world():
+@app.route("/results", methods=["GET", "POST"])
+def results():
+    return render_template("results.html")
+
+@app.route("/", methods=["GET","POST"])
+def home():
+    return render_template("new_index.html")
+
+@app.route("/createquestions", methods=['GET', 'POST'])
+def createquestions():
     return render_template("index.html")
 
 @app.route('/qp.html')  # Define route for qp.html
@@ -78,21 +87,22 @@ def get_generate_result():
 def download_this_pdf():
     return send_file('data/questionpaper.pdf', as_attachment=True)
 
-@app.route("/for_evaluation", methods = ["POST", "GET"])
-def for_evaluation():
-    f = request.get_json()  
-    session["code"] = f["ls"][0]['code']
-    session["dateup"] = f["ls"][0]['datestring']
-    return ""
+
     
 @app.route("/evaluation", methods=['GET', 'POST'])
 def evaluation():
     
-    return render_template("evaluation.html", f= session["code"], g= session["dateup"])
+    return render_template("evaluation.html")
 
 
 @app.route('/upload', methods=['POST', 'GET'])
 def upload_file():
+    session["code"] = request.form.get("sub_code")
+    temp_date = request.form.get("exam_date")
+    date_obj = datetime.strptime(temp_date, '%Y-%m-%d')
+    session["dateup"] = date_obj.strftime('%d-%m-%Y')
+    print(session["code"])
+    print(session["dateup"])
     file_names = []
     for f in request.files.getlist('file'):
         if f.filename != '':

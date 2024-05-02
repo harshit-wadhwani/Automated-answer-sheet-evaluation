@@ -6,10 +6,10 @@
     <title>Evaluation</title>
 </head>
 <body>
-    <h1>Upload a File</h1>
-    <h2>{{f}}</h2>
-    <h2>{{g}}</h2>
+    <h1>Upload a File and fill details </h1>
     <form action="/upload" method="post" enctype="multipart/form-data">
+        <input type="text" name = "sub_code", id = "sub_code">
+        <input type="date" name="exam_date" id="exam_date">
         <input multiple id="file" type="file" name="file"/>
         <input type="submit" value="Upload & Evaluation">
     </form>
