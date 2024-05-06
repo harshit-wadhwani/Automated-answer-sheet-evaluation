@@ -3,6 +3,8 @@ google-cloud
 google-cloud-vision
 pymongo
 python-dotenv
+torch
+pandas
 docxtpl
 docx2pdf
 numpy
