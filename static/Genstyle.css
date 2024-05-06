@@ -2,11 +2,28 @@ body {
     font-family: Arial, sans-serif;
     margin: 0;
     padding: 0;
-    display: flex;
+    /* display: flex; */
     justify-content: center;
     align-items: center;
     height: 100vh;
-    background-color: #f0f0f0;
+    background-color: black;
+  }
+
+  #header-container {
+    
+    align-items: center;
+    margin-bottom: 20px;
+  }
+  #generate-heading {
+    text-align: center;
+    color: coral;
+    margin-bottom: 30px;
+  }
+  
+  #home {
+    position: absolute;
+    top: 10px;
+    right: 10px;
   }
   
   #menu {
@@ -17,6 +34,21 @@ body {
     border: 1px solid #ccc;
     padding: 20px;
     box-shadow: 0 2px 4px rgba(0, 0, 0, 0.1);
+    opacity: 0.8;
+    border-radius: 10px;
+    
+    
+  }
+  #menu1{
+    max-width: 400px;
+    margin: 40px auto;
+    padding: 20px;
+    background-color: #fff;
+    border: 1px solid #ddd;
+    box-shadow: 0 0 10px rgba(0, 0, 0, 0.5);
+    opacity: 0.8;
+    border-radius: 10px;
+    text-align: center;
   }
   
   #menu h1 {
@@ -26,15 +58,16 @@ body {
   #menu button {
     margin-top: 10px;
     padding: 10px 20px;
-    background-color: #007bff;
+    background-color: #28af87;
     color: #fff;
     border: none;
     border-radius: 5px;
     cursor: pointer;
+    /* margin-right: 400px; */
   }
   
   #menu button:hover {
-    background-color: #0056b3;
+    background-color: #126859;
   }
   #menu button:disabled {
     background-color: #ccc;
@@ -48,4 +81,20 @@ body {
     border-radius: 5px;
     width: 1000px;
     box-sizing: border-box;
+  }
+
+  .button_home {
+    width: 100px;
+    height: 40px;
+    margin-bottom: 20px;
+    margin-top: 10px;
+    padding: 10px;
+    border: none;
+    border-radius: 40px;
+    background-color: #28af87;
+    color: #fff;
+    cursor: pointer;
+  }
+  .button_home:hover {
+    background-color: #126859;
   }
