@@ -144,12 +144,12 @@ def result(result_id):
         query = str(session["code"] + session["dateup"])
         print(query)
         
-        ques, ref_ans = db_client.get_quenum_ans_dict("questions", query)
+        ques, ref_ans, scores_assigned = db_client.get_quenum_ans_dict("questions", query)
             
         
-        for ans, ref_answer in zip(l_ans, ref_ans):
+        for ans, ref_answer, scores_q in zip(l_ans, ref_ans, scores_assigned):
             que_scr = check_similarity(ans, ref_answer, model)
-            scr_temp.append(round(abs(que_scr['Perfect'] - que_scr['Contradiction']),2))
+            scr_temp.append(round(abs(que_scr['Perfect'] - que_scr['Contradiction']),2)*scores_q)
         
         scores.append(scr_temp)
         

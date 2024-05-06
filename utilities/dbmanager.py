@@ -50,12 +50,13 @@ class dbmanager:
         result = self.read(collection_name, query)
         questions = []
         answers = []
+        scores = []
         lis = result[0][query_key]
         for i in lis:
             questions.append(i["question"])
             answers.append(i["answer"])
-        
-        return questions, answers
+            scores.append(i["score"])
+        return questions, answers, scores
     
 # db_client = dbmanager()
 # # print(db_client.read("questions", {"data.code" : "testing again"}))
