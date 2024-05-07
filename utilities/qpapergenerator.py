@@ -35,7 +35,7 @@ class GenerateQpaper:
         'date': date,
         "university":uni,
         "subject": sub,
-        "time allotted": time
+        "time": time
         }
         doc.render(context)
         doc.save('data/questionpaper.docx')

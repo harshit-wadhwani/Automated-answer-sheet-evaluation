@@ -11,7 +11,7 @@
     <button id="home">Home</button>
     <p>Enter the question and answers in the given fields. Please ensure that all fields are filled correctly.</p>
     <button id="clear" disabled>clear</button>
-    <input id="score" type="text" placeholder="Insert Score" />
+    <input id="score" type="number" placeholder="Insert Score" />
     <input id="question" type="text" placeholder="Enter Question" />
     <input id="answer" type="text" placeholder="Enter Answer" />
     <button id="save-next" disabled>Save and next </button>
@@ -57,9 +57,9 @@
 
     var sc = localStorage.getItem("sc");
     var ud = localStorage.getItem("ud");
-    var uni = document.getItem("uni");
-    var sub = document.getItem("sub");
-    var time = document.getItem("time");
+    var uni = localStorage.getItem("uni");
+    var sub = localStorage.getItem("sub");
+    var time = localStorage.getItem("time");
     function saveData() {
       data.push({
         date: ud,
