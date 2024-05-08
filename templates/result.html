@@ -3,14 +3,19 @@
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>Results(tempt)</title>
+    <link rel="stylesheet" type="text/css" href="/static/download.css" />
+    <link rel="preconnect" href="https://fonts.googleapis.com">
+    <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+    <link href="https://fonts.googleapis.com/css2?family=Edu+TAS+Beginner&family=Inter:wght@200;300;400;500;600&family=Kalam&family=Montserrat:ital,wght@0,100..900;1,100..900&display=swap" rel="stylesheet">
+    <title>Results</title>
 </head>
 <body>
-    <h1>hello world</h1>
-    <p>{{l_info}}</p>
-    <p>{{l_ans}}</p>
-
-    <h2>{{score}}</h2>
+    <div class="dashboard-header">
+        <h1 class="scripting">Results Portal</h1>
+    </div>
+    <h1 class="scripting_text">The student answers along with the scores alloted is ready after evaluation.<br>
+        Simply click the <span style="color: #28af87;">DOWNLOAD ANSWERS</span> button to download the student answers or <span style="color: #28af87;">DOWNLOAD RESULTS</span> button to download the scores!</br></h1>
+    <h1 class="script_bold">Your download is ready!</h1>
 
     <form action="/download_result" method="get">
         <button type="submit">Download Results</button>
