@@ -6,17 +6,35 @@
 </head>
 
 <body>
-  <div id="menu">
-    <h1>Generate questions </h1>
-    <button id="home">Home</button>
+  <div class="dashboard-header">
+    <h1 id="generate-heading">Generate questions</h1>
+    <button id="home" class="button_home">Home</button>
+  </div>
+
+  <div id="menu1">
     <p>Enter the question and answers in the given fields. Please ensure that all fields are filled correctly.</p>
-    <button id="clear"disabled>clear</button>
-    <input id="score" type="text" placeholder="Insert Score" />
-    <input id="question" type="text" placeholder="Enter Question" />
-    <input id="answer" type="text" placeholder="Enter Answer" />
-    <button id="save-next"disabled>Save and next </button>
-    <button id="generate"disabled>Generate and Quit</button>
     
+    <div class="que_ans">
+      <div class="space_addition"></div>
+      <label for="scores">Enter the marks for this question</label>
+      <div class="space_addition1"></div>
+      <input id="score" name="scores" type="number" placeholder="Insert Score"  />
+      <div class="space_addition"></div>
+      <label for="que">Enter the question</label>
+      <div class="space_addition1"></div>
+      <input id="question" name="que" type="text" placeholder="Enter Question" />
+      <div class="space_addition"></div>
+      <label for="ans">Enter the answer</label>
+      <div class="space_addition1"></div>
+      <input id="answer" name="ans" type="text" placeholder="Enter Answer" />
+      <div class="space_addition"></div>
+    </div>
+    <div class="button-row">
+      <button id="clear" disabled>Clear</button>
+      <button id="save-next" disabled>Save & Next </button>
+    </div>
+    <button id="generate" disabled>Generate</button>
+
   </div>
 
   <script>
@@ -49,12 +67,17 @@
         clearButton.setAttribute("disabled", "");;
       }
     }
-   clearButton.addEventListener("click", function(){ scoreInput.value = "";
-            questionInput.value = "";
-            answerInput.value = "";checkInputs()})
-   
+    clearButton.addEventListener("click", function () {
+      scoreInput.value = "";
+      questionInput.value = "";
+      answerInput.value = ""; checkInputs()
+    })
+
     var sc = localStorage.getItem("sc");
     var ud = localStorage.getItem("ud");
+    var uni = localStorage.getItem("uni");
+    var sub = localStorage.getItem("sub");
+    var time = localStorage.getItem("time");
     function saveData() {
       data.push({
         date: ud,
@@ -63,6 +86,9 @@
         question: questionInput.value,
         answer: answerInput.value,
         Qid: sc + pageNumber,
+        university: uni,
+        subject: sub,
+        time: time
       });
       pageNumber++;
       fetch('/data', {

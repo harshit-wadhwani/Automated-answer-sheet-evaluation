@@ -1,6 +1,8 @@
 body {
     font-family: Arial, sans-serif;
-    background-color: #f9f9f9;
+    background-image: url('qp_back.jpg'); /* Replace 'your-image-url.jpg' with the URL of your background image */
+    background-size: cover; /* Cover the entire background */
+    background-repeat: no-repeat; 
   }
  .button-container {
     max-width: 400px;
@@ -8,8 +10,10 @@ body {
     padding: 20px;
     background-color: #fff;
     border: 1px solid #ddd;
-    box-shadow: 0 0 10px rgba(0, 0, 0, 0.1);
+    box-shadow: 0 0 10px rgba(0, 0, 0, 0.5);
+    opacity: 0.8;
     border-radius: 10px;
+    text-align: center;
   }
   input[type="text"] {
     width: 95%;
@@ -19,21 +23,38 @@ body {
     border: 1px solid #ccc;
     border-radius: 5px;
   }
+  .scripting{
+    font-family: "Montserrat";
+    font-optical-sizing: auto;
+    font-weight: 700;
+    font-size: 42px;
+    
+}
   button {
-    width: 100%;
+    width: 150px;
     height: 40px;
     margin-bottom: 20px;
     padding: 10px;
     border: none;
-    border-radius: 5px;
-    background-color: #4CAF50;
+    border-radius: 40px;
+    background-color: #28af87;
     color: #fff;
     cursor: pointer;
   }
   button:hover {
-    background-color: #3e8e41;
+    background-color: #126859;
   }
   button:disabled {
     background-color: #ccc;
     cursor: not-allowed;
   }
+  .line-break {
+    clear: both; /* Clear floats */
+    margin-top: 15px;
+    margin-bottom: 15px;
+}
+.large-input {
+  width: 200px; /* Adjust the width as needed */
+  height: 35px;
+   /* Adjust the height as needed */
+}

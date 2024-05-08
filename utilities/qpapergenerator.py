@@ -18,10 +18,13 @@ class GenerateQpaper:
         for item in data['data']:
             date= item['date']
             code = item['code']
+            uni= item['university']
+            sub= item['subject']
+            time = item['time']
             break
         result_string = ""
         for num, question,score in zip(qid, questions,score):
-            result_string += f"{num}.\t{question}\t Total Marks:{score}\n"
+            result_string += f"{num}.\t{question}\t (Marks:{score})\n"
 
         doc= DocxTemplate('templates/qpapertemp.docx')
             
@@ -29,7 +32,10 @@ class GenerateQpaper:
         'questions': result_string,
         'total': total,
         'code': code,
-        'date': date
+        'date': date,
+        "university":uni,
+        "subject": sub,
+        "time": time
         }
         doc.render(context)
         doc.save('data/questionpaper.docx')
