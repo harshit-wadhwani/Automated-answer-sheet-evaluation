@@ -3,19 +3,42 @@
   <head>
     <meta charset="UTF-8" />
     <meta name="viewport" content="width=device-width, initial-scale=1.0" />
-    <title>Welcom on board</title>
+    <title>Welcome on board</title>
+    <link rel="stylesheet" href="{{ url_for('static', filename='index_style.css') }}">
+    <link rel="preconnect" href="https://fonts.googleapis.com">
+    <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+    <link href="https://fonts.googleapis.com/css2?family=Edu+TAS+Beginner&family=Inter:wght@200;300;400;500;600&family=Kalam&family=Montserrat:ital,wght@0,100..900;1,100..900&display=swap" rel="stylesheet">
   </head>
+  
   <body>
-    <form action="{{ url_for('createquestions') }}" method="post">
-      <button type="submit">Create Question Paper</button>
-    </form>
-
-    <form action="{{ url_for('evaluation') }}" method="post">
-      <button type="submit">Evaluate Answer Sheet</button>
-    </form>
-
-    <form action="{{ url_for('results') }}" method="post">
-      <button type="submit">Previous Evaluated Results</button>
-    </form>
+    <div class="dashboard-header">
+      <h1 class="scripting">Welcome Evaluator</h1>
+    </div>
+    <div class="content">
+      <div class="left-section">
+        <img src="static\correction.jpg" alt="Image" class="image-size"/>
+        <!-- Move the closing div here -->
+      </div>
+      <!-- Removed extra closing divs -->
+      <div class="right-section">
+        <div class="script_bold">
+          Enjoy the experience of automated corrections!
+        </div>
+        <div class="buttons">
+          <p>Create a new question paper real quick and easy</p>
+          <form action="{{ url_for('createquestions') }}" method="post">
+            <button type="submit">Create Question Paper</button>
+          </form>
+          <p>Evaluate a test</p>
+          <form action="{{ url_for('evaluation') }}" method="post">
+            <button type="submit">Evaluate Answer Sheet</button>
+          </form>
+          <p>View all previous results</p>
+          <form action="{{ url_for('results') }}" method="post">
+            <button type="submit">Previous Evaluated Results</button>
+          </form>
+        </div>
+      </div>
+    </div>
   </body>
 </html>
