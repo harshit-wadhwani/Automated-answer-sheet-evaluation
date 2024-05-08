@@ -14,7 +14,7 @@ body {
     width: 100%;
     border-top-left-radius: 5px; /* Adjust the radius for top-left corner */
     border-top-right-radius: 5px; /* Adjust the radius for top-right corner */
-    box-shadow: 0px 3px 5px rgba(221, 158, 115, 0.4); /* Add shadow for depth */
+    box-shadow: 0px 3px 5px rgba(221, 158, 115, 0.8); /* Add shadow for depth */
 }
   
   .header {

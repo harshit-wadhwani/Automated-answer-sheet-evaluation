@@ -26,61 +26,53 @@ body {
     right: 10px;
   }
   
-  #menu {
+  #menu1{
     display: flex;
     flex-direction: column;
-    align-items: center;
+    align-items: left;
+    position: absolute;
+    top: 55%;
+    left: 50%;
+    transform: translate(-50%, -50%);
     background-color: #fff;
     border: 1px solid #ccc;
     padding: 20px;
-    box-shadow: 0 2px 4px rgba(0, 0, 0, 0.1);
+    box-shadow: 0 2px 4px rgba(0, 0, 0, 0.2);
     opacity: 0.8;
     border-radius: 10px;
-    
-    
   }
-  #menu1{
-    max-width: 400px;
-    margin: 40px auto;
-    padding: 20px;
-    background-color: #fff;
-    border: 1px solid #ddd;
-    box-shadow: 0 0 10px rgba(0, 0, 0, 0.5);
-    opacity: 0.8;
-    border-radius: 10px;
-    text-align: center;
+  .space_addition{
+    margin-top: 10px;
   }
-  
+  .space_addition1{
+    margin-top: 10px;
+  }
+  .que_ans{
+    text-align: left;
+  }
   #menu h1 {
     margin-top: 0;
   }
   
-  #menu button {
-    margin-top: 10px;
-    padding: 10px 20px;
+  #menu1 button {
+    width: 100px;
+    height: 40px;
+    /* margin-bottom: 20px;
+    margin-top: 10px; */
+    padding: 10px;
+    border: none;
+    border-radius: 40px;
     background-color: #28af87;
     color: #fff;
-    border: none;
-    border-radius: 5px;
     cursor: pointer;
-    /* margin-right: 400px; */
   }
   
-  #menu button:hover {
+  #menu1 button:hover {
     background-color: #126859;
   }
-  #menu button:disabled {
+  #menu1 button:disabled {
     background-color: #ccc;
     cursor: not-allowed;
-  }
-  
-  #menu input[type="text"] {
-    margin-top: 10px;
-    padding: 10px;
-    border: 1px solid #ccc;
-    border-radius: 5px;
-    width: 1000px;
-    box-sizing: border-box;
   }
 
   .button_home {
@@ -98,3 +90,24 @@ body {
   .button_home:hover {
     background-color: #126859;
   }
+  input[type="text"] {
+    width: 95%;
+    height: 30px;
+    margin-bottom: 20px;
+    padding: 10px;
+    border: 1px solid #ccc;
+    border-radius: 5px;
+  }
+  input[type="number"] {
+    width: 20%;
+    height: 15px;
+    margin-bottom: 20px;
+    padding: 10px;
+    border: 1px solid #ccc;
+    border-radius: 5px;
+  }
+  .button-row {
+    display: flex;
+    justify-content: space-between; /* Adjust alignment as needed */
+    margin-bottom: 20px; /* Add some margin between the row and the inputs */
+}

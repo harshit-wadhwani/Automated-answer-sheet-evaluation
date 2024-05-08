@@ -24,7 +24,7 @@ class GenerateQpaper:
             break
         result_string = ""
         for num, question,score in zip(qid, questions,score):
-            result_string += f"{num}.\t{question}\t Total Marks:{score}\n"
+            result_string += f"{num}.\t{question}\t\t\t\t Marks:{score}\n"
 
         doc= DocxTemplate('templates/qpapertemp.docx')
             

@@ -48,3 +48,8 @@ body {
     background-color: #ccc;
     cursor: not-allowed;
   }
+  .line-break {
+    clear: both; /* Clear floats */
+    margin-top: 15px;
+    margin-bottom: 15px;
+}
