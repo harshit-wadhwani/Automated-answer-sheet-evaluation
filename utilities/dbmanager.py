@@ -50,12 +50,13 @@ class dbmanager:
         result = self.read(collection_name, query)
         questions = []
         answers = []
+        scores = []
         lis = result[0][query_key]
         for i in lis:
             questions.append(i["question"])
             answers.append(i["answer"])
-        
-        return questions, answers
+            scores.append(i["score"])
+        return questions, answers, scores
     
 # db_client = dbmanager()
 # # print(db_client.read("questions", {"data.code" : "testing again"}))
@@ -63,10 +64,7 @@ class dbmanager:
 # res, ans = db_client.get_quenum_ans_dict("questions", "18AI8116-04-2024")
 # print(res)  
 # print(ans)  
-
 # query = {"_id.18AI8116-04-2024": {"$exists": True}}
-
 # Retrieve the answers
 # answers = db_client.read("answers", None)
-
 # print(answers)
