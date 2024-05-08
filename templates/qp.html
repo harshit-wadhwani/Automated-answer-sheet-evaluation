@@ -10,13 +10,13 @@
     <h1>Generate questions </h1>
     <button id="home">Home</button>
     <p>Enter the question and answers in the given fields. Please ensure that all fields are filled correctly.</p>
-    <button id="clear"disabled>clear</button>
-    <input id="score" type="text" placeholder="Insert Score" />
+    <button id="clear" disabled>clear</button>
+    <input id="score" type="number" placeholder="Insert Score" />
     <input id="question" type="text" placeholder="Enter Question" />
     <input id="answer" type="text" placeholder="Enter Answer" />
-    <button id="save-next"disabled>Save and next </button>
-    <button id="generate"disabled>Generate and Quit</button>
-    
+    <button id="save-next" disabled>Save and next </button>
+    <button id="generate" disabled>Generate and Quit</button>
+
   </div>
 
   <script>
@@ -49,12 +49,17 @@
         clearButton.setAttribute("disabled", "");;
       }
     }
-   clearButton.addEventListener("click", function(){ scoreInput.value = "";
-            questionInput.value = "";
-            answerInput.value = "";checkInputs()})
-   
+    clearButton.addEventListener("click", function () {
+      scoreInput.value = "";
+      questionInput.value = "";
+      answerInput.value = ""; checkInputs()
+    })
+
     var sc = localStorage.getItem("sc");
     var ud = localStorage.getItem("ud");
+    var uni = localStorage.getItem("uni");
+    var sub = localStorage.getItem("sub");
+    var time = localStorage.getItem("time");
     function saveData() {
       data.push({
         date: ud,
@@ -63,6 +68,9 @@
         question: questionInput.value,
         answer: answerInput.value,
         Qid: sc + pageNumber,
+        university: uni,
+        subject: sub,
+        time: time
       });
       pageNumber++;
       fetch('/data', {
