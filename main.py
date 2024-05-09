@@ -1,4 +1,4 @@
-from flask import Flask, render_template, redirect, send_file, url_for,request,jsonify, session
+from flask import Flask, render_template, redirect, send_file, url_for,request,jsonify, session, send_from_directory
 from utilities.dbmanager import dbmanager
 from utilities.qpapergenerator import GenerateQpaper
 from utilities.ocrmanager import detect_document_text
@@ -19,7 +19,6 @@ app.config['UPLOAD_FOLDER'] = 'uploads/'
 model = from_pretrained_keras("keras-io/bert-semantic-similarity")
 
 # Compile the model
-
 
 app.secret_key = 'your_secret_key'
 
@@ -91,8 +90,16 @@ def download_this_pdf():
     
 @app.route("/evaluation", methods=['GET', 'POST'])
 def evaluation():
-    
     return render_template("evaluation.html")
+
+@app.route("/previous", methods=['GET', 'POST'])
+def previous():
+    excel_files = os.listdir('outputs')
+    return render_template("previous.html", excel_files=excel_files)
+
+@app.route('/get/<filename>')
+def get_file(filename):
+    return send_from_directory('outputs', filename, as_attachment=True)
 
 
 @app.route('/upload', methods=['POST', 'GET'])
