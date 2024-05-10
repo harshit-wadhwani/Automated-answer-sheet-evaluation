@@ -109,8 +109,9 @@ def get_file(filename):
 def upload_file():
     session["code"] = request.form.get("sub_code")
     temp_date = request.form.get("exam_date")
-    date_obj = datetime.strptime(temp_date, '%Y-%m-%d')
-    session["dateup"] = date_obj.strftime('%d-%m-%Y')
+    # date_obj = datetime.strptime(temp_date, '%Y-%m-%d')
+    # session["dateup"] = date_obj.strftime('%d-%m-%Y')
+    session["dateup"] = str(temp_date)
     print(session["code"])
     print(session["dateup"])
     file_names = []
@@ -166,7 +167,7 @@ def result(result_id):
         
         for ans, ref_answer, scores_q in zip(l_ans, ref_ans, scores_assigned):
             que_scr = check_similarity(ans, ref_answer, model)
-            scr_temp.append(round(abs(que_scr['Perfect'] - que_scr['Contradiction']))*float(scores_q))
+            scr_temp.append(round(abs(que_scr['Perfect'] - que_scr['Contradiction']),2)*float(scores_q))
         
         scores.append(scr_temp)
         
@@ -217,7 +218,7 @@ def result(result_id):
     for i in range(no_ques):
         s[f"q{i+1}"] = [a[i] for a in scores]
     
-    total_score = [sum(score) for score in scores]
+    total_score = [round(sum(score)) for score in scores]
     s["Student's Score"] = total_score
     
     # s["Total Score"] = [ sum(scores_assigned) for i in range(no_ques)]

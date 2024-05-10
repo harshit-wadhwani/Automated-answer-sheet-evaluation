@@ -40,7 +40,8 @@ def detect_document_text(pdf_file_path):
     patterns_found=[]
 
     #change regex as per format
-    pattern = r'\d{2}\s*[A-Z]{2}\s*\d{2}\s*Q\s*\d+'
+    # pattern = r'\d{2}\s*[A-Z]{2}\s*\d{2}\s*Q\s*\d+'
+    pattern = r'Question\s*[1-9]\s*\d*'
 
     for image_response in response.responses:
         for page in image_response.responses:

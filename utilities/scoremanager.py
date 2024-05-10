@@ -44,7 +44,8 @@ class BertSemanticDataGenerator(tf.keras.utils.Sequence):
             max_length=128,
             return_attention_mask=True,
             return_token_type_ids=True,
-            pad_to_max_length=True,
+            padding='max_length',  # Update padding argument
+            truncation=True,  # Add truncation argument
             return_tensors="tf",
         )
 
@@ -59,6 +60,7 @@ class BertSemanticDataGenerator(tf.keras.utils.Sequence):
             return [input_ids, attention_masks, token_type_ids], labels
         else:
             return [input_ids, attention_masks, token_type_ids]
+
         
 
 def check_similarity(sentence1, sentence2, model):
@@ -74,4 +76,35 @@ def check_similarity(sentence1, sentence2, model):
 
 # model = from_pretrained_keras("keras-io/bert-semantic-similarity")
 
-# print(check_similarity("hello world", "hello world", model))
+# print(check_similarity("""Machine Learning is the] field of study that gives computers the ability to learn
+# without being explicitly programmed.
+# OR
+# A computer program is said to learn from experience E with respect to some task T
+# and some performance measure P, if its performance on T, as measured by P,
+# improves with experience E.
+
+# 3 examples are as follows:
+# Detecting tumors in brain scans
+# This is semantic segmentation, where each pixel in the image is classified (as we
+# want to determine the exact location and shape of tumors), typically using CNNs
+# as well
+#  Creating a chatbot or a personal assistant
+# This involves many NLP components, including natural language understanding
+# (NLU) and question-answering modules.
+# Summarizing long documents automatically
+# This is a branch of NLP called text summarization, again using the same tools.""","""A computer program is said to learn from experience.
+# with respect to some task I and some performance
+# measure P, if its performance on T, as measured by P.
+# improves with Experience E.
+# 3 examples are:-
+# →
+# K
+# →
+# Detecting tumor in scans:
+# This is semantic segmentation, where each pixel in
+# the image is classified using CNN's.
+# Summarizing long documents:
+# Its a branch of NLP that summarizes long text.
+# Object Detection,
+# This is done using Image segmentation using Deep
+# Learning.""", model))
