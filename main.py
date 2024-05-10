@@ -11,6 +11,9 @@ import hashlib
 from huggingface_hub import from_pretrained_keras
 import pandas as pd
 from datetime import datetime
+from openpyxl import load_workbook
+from openpyxl.utils.dataframe import dataframe_to_rows
+from openpyxl.styles import Alignment
 
 
 app = Flask(__name__)
@@ -163,7 +166,7 @@ def result(result_id):
         
         for ans, ref_answer, scores_q in zip(l_ans, ref_ans, scores_assigned):
             que_scr = check_similarity(ans, ref_answer, model)
-            scr_temp.append(round(abs(que_scr['Perfect'] - que_scr['Contradiction']),2)*float(scores_q))
+            scr_temp.append(round(abs(que_scr['Perfect'] - que_scr['Contradiction']))*float(scores_q))
         
         scores.append(scr_temp)
         
@@ -204,7 +207,7 @@ def result(result_id):
     d["Name"] = name_list
     
     for i in range(no_ques):
-        d[f"q{i}"] = [a[i] for a in l_ans_list]
+        d[f"q{i+1}"] = [a[i] for a in l_ans_list]
         
         
     s = {}
@@ -212,16 +215,48 @@ def result(result_id):
     s["Name"] = name_list
     
     for i in range(no_ques):
-        s[f"q{i}"] = [a[i] for a in scores]
+        s[f"q{i+1}"] = [a[i] for a in scores]
     
+    total_score = [sum(score) for score in scores]
+    s["Student's Score"] = total_score
+    
+    # s["Total Score"] = [ sum(scores_assigned) for i in range(no_ques)]
     
     df_scores = pd.DataFrame(s)
     df = pd.DataFrame(d)
     df_scores.to_excel(f"outputs/scores-{query}.xlsx")
     df.to_excel(f"outputs/results-{query}.xlsx")
-
+    adjust_excel_formatting(f"outputs/scores-{query}.xlsx")
+    adjust_excel_formatting(f"outputs/results-{query}.xlsx")
     
     return render_template('result.html', l_info=l_info_list, l_ans=l_ans_list, score =scores)
+
+
+
+def adjust_excel_formatting(file_path, min_row_height=12, divisor=5):
+    try:
+        # Load the Excel file
+        wb = load_workbook(file_path)
+        ws = wb.active  # Get the active worksheet
+
+        # Iterate over each row in the worksheet
+        for row in ws.iter_rows(min_row=1, max_row=ws.max_row, max_col=ws.max_column):
+            for cell in row:
+                # Set text wrap
+                cell.alignment = Alignment(wrap_text=True)
+                # Adjust row height based on content length
+                if cell.value:
+                    content_length = len(str(cell.value))
+                    # Calculate the row height using a minimum height or divisor
+                    new_height = max(content_length / divisor, min_row_height)
+                    cell_row = ws.row_dimensions[cell.row]
+                    cell_row.height = new_height
+
+        # Save the changes to the Excel file
+        wb.save(file_path)
+        print("Formatting adjusted successfully.")
+    except Exception as e:
+        print(f"Error occurred: {str(e)}")
 
 
 if __name__ == '__main__':
