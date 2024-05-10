@@ -53,3 +53,23 @@ button {
     color: coral;
     font-family: "Montserrat";
 }
+.button-row {
+    display: flex;
+    justify-content: space-between; /* Adjust alignment as needed */
+    margin-bottom: 20px;
+}
+.excel-card {
+    border: 1px solid #126859;
+    border-radius: 10px;
+    padding: 10px;
+    margin-bottom: 10px;
+    background-color: #28af87;
+}
+.excel-card:hover {
+    background-color: #126859; /* Change the hover background color */
+    cursor: pointer; 
+}
+.excel-link {
+    text-decoration: none;
+    color: #ffffff;
+}

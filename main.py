@@ -1,4 +1,4 @@
-from flask import Flask, render_template, redirect, send_file, url_for,request,jsonify, session
+from flask import Flask, render_template, redirect, send_file, url_for,request,jsonify, session, send_from_directory
 from utilities.dbmanager import dbmanager
 from utilities.qpapergenerator import GenerateQpaper
 from utilities.ocrmanager import detect_document_text
@@ -19,7 +19,6 @@ app.config['UPLOAD_FOLDER'] = 'uploads/'
 model = from_pretrained_keras("keras-io/bert-semantic-similarity")
 
 # Compile the model
-
 
 app.secret_key = 'your_secret_key'
 
@@ -91,8 +90,16 @@ def download_this_pdf():
     
 @app.route("/evaluation", methods=['GET', 'POST'])
 def evaluation():
-    
     return render_template("evaluation.html")
+
+@app.route("/previous", methods=['GET', 'POST'])
+def previous():
+    excel_files = os.listdir('outputs')
+    return render_template("previous.html", excel_files=excel_files)
+
+@app.route('/get/<filename>')
+def get_file(filename):
+    return send_from_directory('outputs', filename, as_attachment=True)
 
 
 @app.route('/upload', methods=['POST', 'GET'])
@@ -117,11 +124,17 @@ def upload_file():
 @app.route('/download_result')
 def download_file():
     # Path to the file you want to download
-    file_path = f"outputs\\{session['code']}{session['dateup']}.xlsx"
+    file_path = f"outputs\\results-{session['code']}{session['dateup']}.xlsx"
     # Specify the filename for the downloaded file
     filename = f"RESULTS-{session['code']}{session['dateup']}.xlsx"
     # Send the file to the client for download
     return send_file(file_path, as_attachment=True )
+
+@app.route("/download_scores")
+def download_scores():
+    file_path = f"outputs\\scores-{session['code']}{session['dateup']}.xlsx"
+    
+    return send_file(file_path, as_attachment=True)
 
 
 @app.route("/result/<result_id>")
@@ -132,6 +145,7 @@ def result(result_id):
     l_info_list = []
     l_ans_list = []
     l_pat_list = []
+    # l_scr_list = []
     scores= []
     db_client = dbmanager()
     
@@ -144,12 +158,12 @@ def result(result_id):
         query = str(session["code"] + session["dateup"])
         print(query)
         
-        ques, ref_ans = db_client.get_quenum_ans_dict("questions", query)
+        ques, ref_ans, scores_assigned = db_client.get_quenum_ans_dict("questions", query)
             
         
-        for ans, ref_answer in zip(l_ans, ref_ans):
+        for ans, ref_answer, scores_q in zip(l_ans, ref_ans, scores_assigned):
             que_scr = check_similarity(ans, ref_answer, model)
-            scr_temp.append(round(abs(que_scr['Perfect'] - que_scr['Contradiction']),2))
+            scr_temp.append(round(abs(que_scr['Perfect'] - que_scr['Contradiction']),2)*float(scores_q))
         
         scores.append(scr_temp)
         
@@ -191,10 +205,20 @@ def result(result_id):
     
     for i in range(no_ques):
         d[f"q{i}"] = [a[i] for a in l_ans_list]
+        
+        
+    s = {}
+    s["USN"] = usn_list
+    s["Name"] = name_list
     
+    for i in range(no_ques):
+        s[f"q{i}"] = [a[i] for a in scores]
+    
+    
+    df_scores = pd.DataFrame(s)
     df = pd.DataFrame(d)
-    print(d)
-    df.to_excel(f"outputs/{query}.xlsx")
+    df_scores.to_excel(f"outputs/scores-{query}.xlsx")
+    df.to_excel(f"outputs/results-{query}.xlsx")
 
     
     return render_template('result.html', l_info=l_info_list, l_ans=l_ans_list, score =scores)

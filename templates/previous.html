@@ -1,0 +1,25 @@
+<!DOCTYPE html>
+<html>
+
+<head>
+    <title>Previous Results</title>
+    <link rel="stylesheet" type="text/css" href="/static/download.css" />
+    <link rel="preconnect" href="https://fonts.googleapis.com">
+    <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+    <link href="https://fonts.googleapis.com/css2?family=Edu+TAS+Beginner&family=Inter:wght@200;300;400;500;600&family=Kalam&family=Montserrat:ital,wght@0,100..900;1,100..900&display=swap" rel="stylesheet">
+</head>
+
+<body>  
+    <div class="dashboard-header">
+        <h1 class="scripting">Previous Results Portal</h1>
+    </div>
+   
+    <h1 class="script_bold">Get previously evaluated results in a click!</h1>
+    {% for file in excel_files %}
+        <div class="excel-card">
+            <a class="excel-link" href="{{ url_for('get_file', filename=file) }}">{{ file }}</a>
+        </div>
+    {% endfor %}
+</body>
+
+</html>
