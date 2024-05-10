@@ -1,0 +1,15 @@
+flask
+google-cloud
+google-cloud-vision
+pymongo
+python-dotenv
+torch
+pandas
+docxtpl
+docx2pdf
+numpy
+tensorflow==2.13.0
+tensorflow-hub==0.16.1
+huggingface-hub==0.22.2
+keras==2.13.1
+transformers==4.40.1

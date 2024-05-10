@@ -1,0 +1,67 @@
+<!DOCTYPE html>
+<html lang="en">
+
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>Automated Answer Script Evaluation and Grading</title>
+  <link rel="stylesheet" href="{{ url_for('static', filename='styles.css') }}">
+</head>
+
+<body>
+  <div class="button-container">
+
+    <p class="scripting"><h2>Question Paper portal</h2> Please enter the subject code to get started</p>
+
+    <input id="universityname" type="text" placeholder="Insert University Name"></input>
+    <input id="subname" type="text" placeholder="Insert Subject Name"></input>
+    <input id="subcode" type="text" placeholder="Insert Subject code"></input>
+    <input id="timealloted" name="time_alotted" type="text" placeholder="Enter Total Time alotted" ></input>
+    <div class="line-break"></div>
+    <label for="date_exam">Enter the date of exam</label>
+    <input id="dateup" name="date_exam" type="date" format="DD/MM/YYYY" inputmode="dd/mm/yyyy" class="large-input"></input>
+    <div class="line-break"></div>
+    <button id="create" disabled>Create QP</button>
+
+    <script>
+      const createButton = document.getElementById("create");
+      const evaluateButton = document.getElementById("evaluate");
+      document.getElementById("subcode").addEventListener("input", function () {
+        if (document.getElementById('subcode').value) {
+          evaluateButton.removeAttribute("disabled");
+        }
+        else {
+          createButton.setAttribute("disabled", "disabled");
+          evaluateButton.setAttribute("disabled", "disabled");
+        }
+      });
+
+      document.getElementById("dateup").addEventListener("input", function () {
+        if (document.getElementById('dateup').value) {
+          createButton.removeAttribute("disabled");
+        }
+        else {
+          createButton.setAttribute("disabled", "disabled");
+        }
+      });
+
+
+      createButton.addEventListener("click", function () {
+        window.location.href = "qp.html";
+        var code = document.getElementById("subcode").value;
+        var dateup = document.getElementById("dateup").value;
+        var uni = document.getElementById("universityname").value;
+        var sub = document.getElementById("subname").value;
+        var time = document.getElementById("timealloted").value;
+        localStorage.setItem("sc", code);
+        localStorage.setItem("ud", dateup)
+        localStorage.setItem("uni", uni);
+        localStorage.setItem("sub", sub)
+        localStorage.setItem("time", time);
+      });
+
+    </script>
+  </div>
+</body>
+
+</html>

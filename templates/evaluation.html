@@ -1,0 +1,31 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <link rel="stylesheet" href="{{ url_for('static', filename='eval.css') }}">
+    <link rel="preconnect" href="https://fonts.googleapis.com">
+    <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+    <link href="https://fonts.googleapis.com/css2?family=Edu+TAS+Beginner&family=Inter:wght@200;300;400;500;600&family=Kalam&family=Montserrat:ital,wght@0,100..900;1,100..900&display=swap" rel="stylesheet">
+    <title>Evaluation</title>
+</head>
+<body>
+    <div class="dashboard-header">
+        <h1 class="scripting">Evaluation Portal</h1>
+      </div>
+    <h1 class="script_bold1">Upload a File and fill details </h1>
+    <div class="scripting">
+    <form action="/upload" method="post" enctype="multipart/form-data">
+        <label for="sub_code" class="script_bold">Enter Subject Code</label>
+        <input type="text" name = "sub_code", id = "sub_code" class="large-input">
+        <label for="exam_date" class="script_bold">Exam Date</label>
+        <input type="date" name="exam_date" id="exam_date" class="large-input">
+        <label for="file" class="script_bold">Choose File</label>
+        <input multiple id="file" type="file" name="file" class="large-input"/>
+        <div class="button-container">
+            <button type="submit" class="button">Upload & Evaluation</button>
+        </div>
+    </form>
+</div>
+</body>
+</html>

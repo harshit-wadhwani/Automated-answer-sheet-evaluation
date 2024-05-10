@@ -1,0 +1,75 @@
+body {
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+    margin: 0;
+    padding: 20px;
+    background-color: black;
+}
+
+button {
+    margin: 0 10px;
+    padding: 10px 20px;
+    font-size: 16px;
+    margin-top: 20px;
+    border-radius: 40px; /* Adjust the value for the desired roundness */
+    border: none;
+    background-color: #28af87; /* Change the background color as needed */
+    color: #fff; /* Change the text color as needed */
+    transition: background-color 0.3s ease;
+  }
+  button:hover {
+    background-color: #126859; /* Change the hover background color */
+    cursor: pointer; /* Change the cursor to pointer on hover */
+}
+.dashboard-header {
+    background-color: black;
+    padding: 20px;
+    text-align: center;
+    color: coral;
+    width: 100%;
+    border-top-left-radius: 5px; /* Adjust the radius for top-left corner */
+    border-top-right-radius: 5px; /* Adjust the radius for top-right corner */
+    box-shadow: 0px 3px 5px rgba(221, 158, 115, 0.8); /* Add shadow for depth */
+}
+.scripting{
+    font-family: "Montserrat";
+    font-optical-sizing: auto;
+    font-weight: 700;
+    font-size: 42px;
+    color: coral;
+    
+}
+.script_bold{
+   font-weight: bold; 
+   font-size: 30px;
+   color: coral;
+   font-family: "Montserrat";
+}
+.scripting_text{
+    /* font-weight: bold;  */
+    font-size: 20px;
+    margin-top: 30px;
+    color: coral;
+    font-family: "Montserrat";
+}
+.button-row {
+    display: flex;
+    justify-content: space-between; /* Adjust alignment as needed */
+    margin-bottom: 20px;
+}
+.excel-card {
+    border: 1px solid #126859;
+    border-radius: 10px;
+    padding: 10px;
+    margin-bottom: 10px;
+    background-color: #28af87;
+}
+.excel-card:hover {
+    background-color: #126859; /* Change the hover background color */
+    cursor: pointer; 
+}
+.excel-link {
+    text-decoration: none;
+    color: #ffffff;
+}
