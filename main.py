@@ -14,7 +14,7 @@ from datetime import datetime
 from openpyxl import load_workbook
 from openpyxl.utils.dataframe import dataframe_to_rows
 from openpyxl.styles import Alignment
-
+import math
 
 app = Flask(__name__)
 
@@ -161,13 +161,16 @@ def result(result_id):
         scr_temp = []
         query = str(session["code"] + session["dateup"])
         print(query)
-        
-        ques, ref_ans, scores_assigned = db_client.get_quenum_ans_dict("questions", query)
+        try:
+            ques, ref_ans, scores_assigned = db_client.get_quenum_ans_dict("questions", query)
+        except Exception as e:
+            return render_template("500.html"),500
+       
             
         
         for ans, ref_answer, scores_q in zip(l_ans, ref_ans, scores_assigned):
             que_scr = check_similarity(ans, ref_answer, model)
-            scr_temp.append(round(abs(que_scr['Perfect'] - que_scr['Contradiction']),2)*float(scores_q))
+            scr_temp.append(math.ceil(((0.7 * que_scr['Perfect']) + ((1 - que_scr['Contradiction'])*0.3))*float(scores_q)))
         
         scores.append(scr_temp)
         
